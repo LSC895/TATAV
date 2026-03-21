@@ -1,108 +1,85 @@
-# ⚔️ Tatav 1 — AI Commander Battle
-### Local Edition — No API Keys, No Rate Limits, Runs on Your NVIDIA GPU
+⚔️ Tatav 1 — AI Commander Battle
 
----
+#तत्त्व (Tatav) — the essence of intelligence
 
-## 🚀 Quick Start (5 minutes)
+A real-time multi-agent AI battle game where two AI commanders think, react, and make strategic decisions — running fully local, no API keys, no rate limits. 
 
-### Step 1 — Install Ollama (one time only)
-1. Go to: **https://ollama.com/download**
-2. Download for Windows → install it
-3. Open Command Prompt and run:
-   ```
-   ollama pull mistral
-   ```
-   This downloads the Mistral AI model (~4GB). Takes a few minutes.
+I build this in one day with Ollma! 
 
-### Step 2 — Install Python (if not already)
-1. Go to: **https://python.org/downloads**
-2. Download Python 3.11+ → install it
-3. ✅ Check "Add Python to PATH" during install
+🎮 Live Demo
+https://github.com/user-attachments/assets/YOUR_SCREEN_RECORDING_HERE
 
-### Step 3 — Run Tatav 1
-1. Extract this folder anywhere on your PC
-2. Double-click **START.bat**
-3. Browser opens automatically → **http://localhost:8000**
-4. Press **Start Battle** — done!
+Two AI commanders (Agni 🔴 and Vayu 🔵) fight on a live battle map.
+You control the weather, drop loot, send peace offers, or just drop a bomb.
+Each AI has 10 seconds to think — or face the 💣 BOMB.
 
----
+🧠 What This Is
+Tatav 1 is the demo prototype of a larger vision:
 
-## 🎮 How to Play
+Building an AI that can perceive a game environment, reason about it, and act —
+similar to Google DeepMind's SIMA, but built from scratch by a solo indie AI engineer.
 
-| Button | What it does |
-|--------|-------------|
-| ▶ Start Battle | Begins the battle — both AIs start thinking |
-| 💰 Loot | Drops a treasure chest on the map — AIs react |
-| ⚔️ Weapon | Drops a weapon cache — tempts AIs to FIGHT |
-| ⛈ Storm | Triggers storm — damages BOTH armies each round |
-| ☀️ Clear | Clears the storm — restores morale |
-| 🕊 Peace | Sends a peace envoy — may trigger NEGOTIATE |
-| 💣 BOMB | Manually bombs a random commander |
+This version uses Mistral via Ollama as the reasoning brain.
+The next version (Tatav Brain) will use a custom-trained PyTorch model — no borrowed AI.
 
-**Timer:** Each AI has **10 seconds** to think. If time runs out → 💣 BOMB drops automatically!
+🏗️ Architecture
+User Browser (HTML/JS)
+      ↕ WebSocket
+FastAPI Server (Python)
+      ↕ HTTP
+Ollama (Mistral 7B) — runs on your local GPU
+Frontend — Pure HTML/CSS/JS, no framework
+Backend — FastAPI + WebSocket for real-time communication
+AI Brain — Mistral 7B via Ollama (local, free, unlimited)
+Game Logic — Custom Python engine (state, combat, map, timer)
 
-**Decisions:** AI can choose FIGHT ⚔️ / DEFEND 🛡️ / NEGOTIATE 🤝 / RETREAT 🏃
+⚡ Quick Start
+Requirements
 
-**Win condition:** Troops reach 0 OR after 20 rounds — highest troops+loot wins.
+Windows PC with NVIDIA GPU
+Python 3.11+
+Ollama
 
----
+Setup
+# 1. Pull the AI model (one time, ~4GB)
+ollama pull mistral
 
-## ⚙️ Change the AI Model
+# 2. Clone this repo
+git clone https://github.com/YOUR_USERNAME/tatav1
+cd tatav1
 
-Open `server.py` and change line 20:
+# 3. Install dependencies
+pip install -r requirements.txt
 
-```python
-MODEL = "mistral"        # fast, ~4GB
-# MODEL = "llama3"       # smarter, ~8GB
-# MODEL = "phi3"         # smallest, ~2GB (good for low RAM)
-# MODEL = "gemma2"       # good balance
-```
+# 4. Run
+python -m uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 
-Then run: `ollama pull <model_name>`
+Then open http://localhost:8000 and press Start Battle.
+Or just double-click START.bat on Windows.
 
----
+🎮 Controls (button with effect on AI)
+#1 💰 Drop Loot - Tempts both AIs — aggressive ones will FIGHT for it
+#2 ⚔️ Drop Weapon - Boosts attack — changes risk calculation
+#3 ⛈️ Storm - Damages both armies every round — forces defensive play
+#4 ☀️ Clear Weather - Restores morale — may trigger aggression
+#5 🕊️ Peace Offer - May trigger NEGOTIATE if morale is low
+#6 💣 BOMB - Manual chaos — drop a bomb on a random commander
 
-## 🔧 Troubleshooting
+📊 AI Decision System
+Each round, both AI commanders receive a prompt containing:
 
-**"Ollama not running" warning:**
-→ Open Command Prompt → run `ollama serve`
+Their current stats (troops, morale, loot)
+Enemy stats
+Weather conditions
+Active events (loot drops, peace offers)
 
-**Game is slow:**
-→ Use `phi3` model (faster, smaller)
-→ Make sure your NVIDIA GPU drivers are up to date
+They must respond with one of:
+FIGHT ⚔️ / DEFEND 🛡️ / NEGOTIATE 🤝 / RETREAT 🏃
+They have 10 seconds to decide. Miss the timer → 💣 automatic bomb.
 
-**Port already in use:**
-→ Change `--port 8000` to `--port 8001` in START.bat
-
-**Browser doesn't open:**
-→ Manually go to http://localhost:8000
-
----
-
-## 🏗️ Project Structure
-
-```
-tatav1/
-├── server.py          ← FastAPI backend + AI logic
-├── requirements.txt   ← Python packages
-├── START.bat          ← Windows launcher
-├── README.md          ← This file
-└── static/
-    └── index.html     ← Frontend (auto-served)
-```
-
----
-
-## 🌱 What to build next (Tatav 2)
-
-- More commanders (4-way battle)
-- Different AI personalities (coward, traitor, berserker)
-- Memory — AIs remember previous rounds
-- Map events (earthquakes, floods, reinforcements)
-- Multiplayer — user controls one army, AI controls the other
-- Voice narration for each decision
-
----
-
-Built with ❤️ using FastAPI + Ollama + Mistral
-**Tatav** (तत्त्व) — the essence of intelligence
+#Challenge faces nd limitation 
+#1 AI brian is Mistral (borrowed) - not our own 
+#2 MIstral Intall isn Tuff
+#3 2d grid map not a real 3d game environment 
+#4 no presistent memory across rounds 
+#5 Decisions are text based - no visual preception yet 
